@@ -11,7 +11,9 @@ from io import BytesIO
 from PIL import Image
 
 # ---------------- GEMINI SETUP ----------------
-genai.configure(api_key="AIzaSyCe7Ye01anyGrncsNIvBv36qBawLS-hn-w")
+import os
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
 
 # AI Chat Model (FAST + powerful)
 text_model = genai.GenerativeModel("models/gemini-2.5-flash")
@@ -170,7 +172,10 @@ async def make_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 # ---------------- BOT RUNNER ----------------
-app = ApplicationBuilder().token("8567922471:AAH5KMbjHPhkBQhlw2XJ6kT8lfBPMUWBpIs").build()
+import os
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
+
 
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("ai", ai_chat))
@@ -186,3 +191,4 @@ app.add_handler(CommandHandler("sticker", make_sticker))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, ai_chat))
 
 app.run_polling()
+
